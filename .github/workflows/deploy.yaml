@@ -15,16 +15,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 🔐 SonarCloud Scan (SAST)
+    # 🔐 SonarCloud Scan
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
-        args: >
-          -Dsonar.projectKey=YOUR_PROJECT_KEY
-          -Dsonar.organization=YOUR_ORG
-          -Dsonar.host.url=https://sonarcloud.io
+        projectBaseDir: .
 
     # 🛡 OWASP Dependency Check
     - name: OWASP Dependency Check
@@ -33,6 +30,7 @@ jobs:
         project: "devsecops-app"
         path: "."
         format: "HTML"
+        failOnCVSS: 7
 
     # 🐳 Build Docker Image
     - name: Build Docker Image
@@ -40,7 +38,7 @@ jobs:
 
     # 🔍 Trivy Scan
     - name: Trivy Scan
-      uses: aquasecurity/trivy-action@master
+      uses: aquasecurity/trivy-action@0.20.0
       with:
         image-ref: devsecops-app:latest
         format: table

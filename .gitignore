@@ -30,3 +30,4 @@ coverage/
 # temp files
 tmp/
 temp/
+sonar-project.properties
